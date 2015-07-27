@@ -1,19 +1,13 @@
 # my-linux-tools
 I have started learning Linux.There are shell scripts at "/bin" I have wrote.
 ## loginBUPT
-usage: loginBUPT [-u username] [-p password] [-i ip] [-h][-t]
-
-        -u username
-        
-        -p password
-        
-        -i remote server login IP
-        
-        -h display this help and exit
-        
-        -t test the current network if available or not and exit
-        
-EOF
+usage: loginBUPT [-u username] [-p password] [-i ip] [-h][-t]  
+        -u username  
+        -p password  
+        -i remote server login IP  
+        -h display this help and exit  
+        -t test the current network if available or not and exit  
+EOF  
 
 exit 1
 
