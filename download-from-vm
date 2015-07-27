@@ -1,0 +1,13 @@
+#!/bin/bash
+showHelp()
+{
+cat <<EOF
+usage: $0 [filename]
+EOF
+exit 1
+}
+if [ -z "$1" ]; then
+showHelp
+else
+wget http://10.210.45.249:8080/examples/download/$1
+fi
