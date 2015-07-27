@@ -1,0 +1,77 @@
+#!/bin/bash
+showHelp()
+{
+cat <<EOF
+usage: $0 [-u username] [-p password] [-i ip] [-h][-t]
+	-u username
+	-p password
+	-i remote server login IP
+	-h display this help and exit
+	-t test the current network if available or not and exit
+EOF
+exit 1
+}
+testState()
+{
+if ping -c 1 -w 2 baidu.com &>/dev/null
+then
+	echo "The internet is Ok!"
+else
+	echo "The internet is unavailable!"
+fi
+}
+# 解析参数
+while getopts ":u:p:i:ht" arg
+do
+	case $arg in
+		u)
+			user=$OPTARG
+			;;
+		p)
+			password=$OPTARG
+			;;
+		h)
+			showHelp
+			;;
+		i)
+			ip=$OPTARG
+			;;
+		t)
+			testState
+			;;
+		:|?|*)
+			showHelp
+			;;
+	esac
+done
+
+# 如果没有获取参数,则交互式输入
+if [ -z "$user" ]
+then
+	read -p"username:" user
+fi
+
+if [ -z "$password" ]
+then
+	stty -echo
+	read -p"password:" password
+	stty echo
+	echo
+fi
+
+# 检查参数是否成功输入
+[ -z "$user" ] && showHelp
+[ -z "$password" ] && showHelp
+
+# 发送post数据, 注意这里没有保存cookies
+ip=${ip:-"10.3.8.211"} # 这里设置ip的缺省值
+curl -A "Mozilla/4.0(compatible;MSIE 6.0;Windows NT 5.0)" -d "DDDDD=$user&upass=$password&save_me=1&R1=0" "$ip" -o null 2>/dev/null
+
+# 本来想用nc的,结果发现即使不登录也会返回0 
+# FIXME: 下面这段检测网络是否正确连接的代码,不健壮,不保证输出是正确结果, 运行后请手动ping
+# if ping -c 1 -w 2 baidu.com &>/dev/null
+# then
+	# echo "The internet is Ok!"
+# else
+	# echo "Fail to login!"
+# fi
